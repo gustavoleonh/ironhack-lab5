@@ -47,7 +47,7 @@ GROUP BY
 
 **Original query:**
 
-```
+``` sql
 SELECT CustomerName FROM Customers WHERE City = 'London' ORDER BY CustomerName;
 ```
 
