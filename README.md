@@ -9,9 +9,9 @@
 #### Implementing and Optimizing Database Queries
 
 ##### Task 1: SQL Query Optimization
-<br>
+
 ###### 1.1 Orders
-<br>
+
 **Original query:**
 
 ``` sql
@@ -25,8 +25,8 @@ GROUP BY Orders.OrderID;
 **Optimization proposal:**
 
 Two indexes are considered to be created in order to improve query performance.
-<br>
-```
+
+``` sql
 CREATE INDEX idx_orderdetails_orderid_quantity ON OrderDetails(OrderID, Quantity);
 CREATE INDEX idx_orders_orderid ON Orders(OrderID);
 
@@ -42,18 +42,18 @@ WHERE
 GROUP BY 
     Orders.OrderID;
 ```
-<br>
+
 ###### 1.2 Customer
-<br>
+
 **Original query:**
-<br>
+
 ```
 SELECT CustomerName FROM Customers WHERE City = 'London' ORDER BY CustomerName;
 ```
 
 **Optimization proposal:**
-<br>
-```
+
+``` sql
 CREATE INDEX idx_customers_city ON Customers(City);
 CREATE INDEX idx_customers_city_customername ON Customers(City, CustomerName);
 
@@ -62,11 +62,11 @@ FROM Customers
 WHERE City = 'London' 
 ORDER BY CustomerName;
 ```
-<br>
+
 ##### Task 2: NoSQL Query Implementation
 
 ###### 2.1 OrdersUser Posts Query
-<br>
+
 **Original query:**
 
 ``` json
@@ -76,34 +76,34 @@ db.posts
 ```
 
 **Optimization proposal:**
-<br>
+
+
 1. Create a compound index on status and likes fields. This will help the query filter by status and sort by likes efficiently.
 2. Limit results.
 
-```
+``` json
 db.posts.createIndex({ status: 1, likes: -1 });
 db.posts.find({ status: "active" }, { title: 1, likes: 1 }).sort({ likes: -1 }).limit(100);
 ```
 
 ###### 2.2 User Data Aggregation:
-<br>
+
 **Original query:**
-<br>
-```
+
+``` json
 db.users.aggregate([
   { $match: { status: "active" } },
   { $group: { _id: "$location", totalUsers: { $sum: 1 } } },
 ]);
 ```
-<br>
+
 **Optimization proposal:**
 
 1. Create indexes.
 2. When quering results always use projection in order to only retriebve neccesary fields,
 3. Ensure the `$match` stage is as specific as possible and appears early in the pipeline to reduce the number of documents processed in subsequent stages.
 
-<br>
-```
+``` json
 db.users.createIndex({ status: 1, location: 1 });
 db.users.aggregate([
   { $match: { status: "active" } },
